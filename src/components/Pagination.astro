@@ -1,0 +1,20 @@
+---
+const { prevUrl, nextUrl } = Astro.props;
+---
+
+<nav aria-label="pagination page" class="justify-center my-12">
+  {
+    prevUrl && (
+      <button class="btn btn-primary mx-5">
+        <a href={prevUrl}>prev</a>
+      </button>
+    )
+  }
+  {
+    nextUrl && (
+      <button class="btn btn-primary mx-5">
+        <a href={nextUrl}>next</a>
+      </button>
+    )
+  }
+</nav>

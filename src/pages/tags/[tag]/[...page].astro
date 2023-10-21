@@ -1,0 +1,111 @@
+---
+import Card from "../../../components/Card.astro";
+import Pagination from "../../../components/Pagination.astro";
+import { wpquery } from "../../../graphql/wpQuery";
+import MainBlog from "../../../layout/MainBlog.astro";
+import MainLayout from "../../../layout/MainLayout.astro";
+
+export const getStaticPaths = async ({ paginate }: any) => {
+  const dataTag = await wpquery({
+    query: `
+		{
+			tags {
+				nodes {
+				id
+				name
+				slug
+				}
+			}
+		}
+		`,
+  });
+
+  const dataPost = await wpquery({
+    query: `
+      {
+        posts(first: 100){
+          nodes {
+            slug
+            title(format: RENDERED)
+            excerpt(format: RENDERED)
+            date
+            featuredImage {
+              node {
+                sourceUrl(size: MEDIUM)
+              }
+            }
+            tags {
+              nodes {
+                slug
+                name
+              }
+            }
+            categories {
+              nodes {
+                slug
+                name
+              }
+            }
+          }
+        }
+      }
+      `,
+  });
+
+  return dataTag.tags.nodes.flatMap((item: any) => {
+    const filter = dataPost.posts.nodes.filter((post: any) => {
+      return post.tags.nodes.some(
+        (kategori: any) => kategori.slug === item.slug
+      );
+    });
+    return paginate(filter, {
+      params: { tag: item.slug },
+      pageSize: 2,
+    });
+  });
+};
+
+const { page } = Astro.props;
+const { tag } = Astro.params;
+
+const pageResult = tag!.replace(/-/g, ' ')
+---
+
+<MainLayout>
+  <div class="lg:mx-[15rem] md:mx-[8rem] sm:mx-[4rem] mx-[2rem]">
+    <div class="flex justify-center mb-10">
+      <h1 class="text-2xl">{pageResult}</h1>
+    </div>
+    <article class="card-container flex justify-center">
+      <div class="w-full">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center items-stretch gap-7"
+        >
+          {
+            page.data.map((item: any) => {
+              const date = item.date!.split("T").slice(0, 1);
+              const tags = item.tags.nodes;
+              const categories = item.categories.nodes;
+
+              return (
+                <Card
+                  class="flex-item"
+                  slug={item.slug}
+                  date={date}
+                  title={item.title.slice(0, 20)}
+                  excerpt={item.excerpt}
+                  image={item.featuredImage.node.sourceUrl}
+                  {categories}
+                  {tags}
+                />
+              );
+            })
+          }
+        </div>
+      </div>
+    </article>
+    <div class="pagination flex justify-center">
+      <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+    </div>
+  </div>
+</MainLayout>

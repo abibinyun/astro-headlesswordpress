@@ -1,0 +1,22 @@
+---
+const {id, title, date, slug, tags, image} = Astro.props
+---
+<div class="bg-dark-100 flex flex-row m-2 p-2">
+  <div class="mr-2">
+    <a href={`/download/${slug}`}>
+      <div class="h-[100px] w-[100px]">
+        {
+          
+          image !== undefined ? <img src={image} alt={title} class="w-full h-full object-cover rounded-md" /> : []
+          
+        }
+      </div>
+    </a>
+  </div>
+  <div class="flex flex-col">
+    <a href={`/download/${slug}`}>
+      <p>{title}</p>
+    </a>
+    <p>{date}</p>
+  </div>
+</div>

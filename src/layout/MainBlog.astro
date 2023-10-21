@@ -1,0 +1,14 @@
+---
+import MainLayout from "./MainLayout.astro";
+const {title, description, image, data, robots} = Astro.props
+---
+<MainLayout {title} {description} {image} {data} {robots}>
+    <div class="w-full flex justify-center">
+        <div class="lg:w-[70%] w-full lg:ml-24 lg:mr-3 md:mx-12 sm:mx-8 mx-4">
+            <slot name="center" />
+        </div>
+        <div class="w-[30%] lg:mr-24 lg:ml-3 md:mx-12 sm:mx-6 mx-3 lg:block hidden">
+            <slot name="right" />
+        </div>
+    </div>
+</MainLayout>

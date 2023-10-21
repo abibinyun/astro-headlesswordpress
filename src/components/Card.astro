@@ -1,0 +1,28 @@
+---
+import Tag from "./Tag.astro";
+const { slug, title, excerpt, date, image, tags, categories } = Astro.props;
+---
+
+<div class="card lg:w-[15rem] lg:h-[20rem] bg-base-200 shadow-xl flex flex-col text-xs">
+  <figure class="">
+    <img src={image} alt={title} class="object-cover h-[10rem] w-[15rem]" />
+  </figure>
+  <div class="card-body items-start text-start p-4">
+    <div>
+      <Tag textTag="Tags" textCat="Categories" {tags} {categories} {date}/>
+    </div>
+    
+    <h2 class="card-title">
+      <a href={`/download/${slug}`}>{title}</a>
+    </h2>
+
+    <!-- <div class="">
+      <p set:html={excerpt.slice(0, 120)} />
+    </div> -->
+    <div class="card-actions mt-auto">
+      <button class="btn btn-secondary btn-xs mt-5">
+        <a href={`/download/${slug}`}>Readmore</a>
+      </button>
+    </div>
+  </div>
+</div>

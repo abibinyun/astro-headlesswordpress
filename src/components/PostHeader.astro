@@ -1,0 +1,34 @@
+---
+// library imports
+import { Image } from "astro:assets";
+
+// utils imports
+import { slugify } from "../js/utils";
+
+const { categories, title, author, date, image } = Astro.props;
+---
+
+<header>
+  <div class="container">
+    <small>
+      <a href={`/category/${slugify(categories)}/`} class="badge">{categories}</a>
+    </small>
+    <h1 class="h2">{title}</h1>
+    <p>
+      by <a href={`/author/${slugify(author)}/`}>{author}</a> • {
+        date
+      }
+    </p>
+  </div>
+  <Image
+    src={image}
+    alt={title}
+    format="avif"
+    quality={80}
+    class="hero-image"
+    width="800"
+    height="100"
+    decoding="async"
+    loading="lazy"
+  />
+</header>

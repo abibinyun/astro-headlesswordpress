@@ -1,0 +1,34 @@
+---
+import "../global.css";
+import MainHead from "./MainHead.astro";
+import { Footer, Nav } from "../components/index.astro";
+import ThemeChange from "../components/ThemeChange.astro";
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  data?: string;
+  robots?: boolean
+}
+const { title = "Default Title", description = "Default Description", image, data, robots } = Astro.props as Props;
+
+---
+
+<!doctype html>
+<html lang="en">
+  
+  <MainHead {title} {description} url={Astro.url} {image} {data} {robots}>
+    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
+  </MainHead>
+  <body class="main-body">
+      <div class="flex flex-col h-screen">
+        <Nav>
+          <ThemeChange/>
+        </Nav>
+        <main class="w-full">
+          <slot />
+        </main>
+        <Footer />
+      </div>
+    </body>
+  </html>

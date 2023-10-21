@@ -1,0 +1,90 @@
+---
+import Card from "../../components/Card.astro";
+import Pagination from "../../components/Pagination.astro";
+import { wpquery } from "../../graphql/wpQuery";
+import MainBlog from "../../layout/MainBlog.astro";
+import SideBar from "../../components/SideBar.astro";
+
+export const getStaticPaths = async ({ paginate }: any) => {
+  const data = await wpquery({
+    query: `
+	{
+		posts(first: 100) {
+			nodes {
+			slug
+			title(format: RENDERED)
+			excerpt(format: RENDERED)
+			date
+			featuredImage {
+				node {
+				sourceUrl(size: MEDIUM)
+				}
+			}
+			tags {
+				nodes {
+				slug
+				name
+				}
+			}
+			categories {
+				nodes {
+				slug
+				name
+				}
+			}
+			}
+		}
+	}
+	`,
+  });
+
+  return paginate(data.posts.nodes, {
+    pageSize: 9,
+  });
+};
+
+const { page } = Astro.props;
+---
+<MainBlog
+	title="Download Page"
+	description="Download Software Gratis Terbaru Link GoogleDrive"
+>
+<div slot="center">
+  <article class="card-container flex justify-center">
+    <div class="w-full">
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center items-stretch gap-7"
+      >
+        {
+          page.data.map((list: any) => {
+            const date = list.date!.split("T").slice(0, 1);
+            const tags = list.tags.nodes;
+            const categories = list.categories.nodes;
+
+            return (
+              <Card
+                class="flex-item"
+                slug={list.slug}
+                date={date}
+                title={list.title.slice(0, 20)}
+                excerpt={list.excerpt}
+                image={list.featuredImage.node.sourceUrl}
+                {categories}
+                {tags}
+              />
+            );
+          })
+        }
+      </div>
+    </div>
+  </article>
+  <div class="pagination flex justify-center">
+    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+  </div>
+</div>
+<div slot="right">
+  <div class="sidebar flex justify-center">
+    <SideBar />
+  </div>
+</div>
+</MainBlog>

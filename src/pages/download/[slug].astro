@@ -1,0 +1,117 @@
+---
+import PostHeader from "../../components/PostHeader.astro";
+import SideBar from "../../components/SideBar.astro";
+import { wpquery, fetchRelatedPost } from "../../graphql/wpQuery";
+import MainBlog from "../../layout/MainBlog.astro";
+
+export const getStaticPaths = async () => {
+  const data = await wpquery({
+    query: `
+	{
+		posts (first: 100){
+			nodes {
+        id
+				slug
+				date
+				title
+				excerpt(format: RENDERED)
+				content(format: RENDERED)
+				featuredImage {
+					node {
+					sourceUrl
+					}
+				}
+        tags {
+          nodes {
+            slug
+            name
+          }
+        }
+        categories {
+          nodes {
+            slug
+            name
+          }
+        }
+			}
+		}
+	}
+	`,
+  });
+  return data.posts.nodes.map((post: any) => {
+    return {
+      params: { slug: post.slug },
+      props: { post },
+    };
+  });
+};
+
+const { post } = Astro.props;
+const { date, title, excerpt, content, featuredImage, categories, id } = post;
+
+const cat = categories.nodes.map((item: any) => item.name).join(', ')
+const relatedPost = await fetchRelatedPost(id, cat)
+
+const postDate = date.split("T").slice(0, 1);
+const data = {
+  title,
+  description: content,
+  image: featuredImage.node.sourceUrl,
+  date: postDate,
+  author: 'abi'
+}
+
+---
+<MainBlog 
+  	title={`Download | ${title} Link GoogleDrive`} 
+    description={excerpt}
+    image={featuredImage.node.sourceUrl}
+    {data}
+	>
+  <div slot="center">
+    <article
+    class="prose md:prose-base prose-sm prose-img:rounded-md prose-headings:underline prose-a:text-blue-900 p-5 lg:ml-[5rem]"
+    >
+    <PostHeader {categories} {title} author={data.author} {date} image={data.image} />
+    <Fragment set:html={content} />
+    <!-- <button class="btn btn-primary mt-10">
+      <a href="/download">back</a>
+        </button> -->
+    </article>
+    <div class="lg:hidden block">
+      <h4>Related Post</h4>
+      {
+        relatedPost.data.posts.edges.map((item: any) => {
+          return (
+            <SideBar 
+              id={item.node.id}
+              title={item.node.title}
+              date={item.node.date}
+              slug={item.node.slug}
+              tags={item.node.tags.nodes}
+              image={item.node.featuredImage.node.sourceUrl}
+            />
+          )
+        })
+      }
+    </div>
+  </div>
+    
+  <div slot="right" class="lg:mt-[10rem]">
+      <h3>Related Post</h3>
+      {
+        relatedPost.data.posts.edges.map((item: any) => {
+          return (
+            <SideBar 
+              id={item.node.id}
+              title={item.node.title}
+              date={item.node.date}
+              slug={item.node.slug}
+              tags={item.node.tags.nodes}
+              image={item.node.featuredImage.node.sourceUrl}
+            />
+          )
+        })
+      }
+  </div>
+</MainBlog>

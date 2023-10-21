@@ -1,0 +1,59 @@
+---
+import { wpquery } from "../graphql/wpQuery";
+
+const categoryList = await wpquery({
+  query: `{
+      categories {
+            nodes {
+              slug
+              name
+            }
+          }
+    }
+  `,
+});
+
+---
+
+<div class="navbar bg-base-100 mb-24 lg:px-[7rem] px-4">
+  <div class="flex-1">
+    <a class="btn btn-ghost normal-case text-xl" href="/">mangUsop</a>
+  </div>
+  <div class="flex-none align-end">
+    <ul class="menu menu-horizontal px-1">
+      <!-- <li><a class="btn btn-ghost normal-case text-xl lg:block hidden" href="/download">All Apps</a></li> -->
+      {
+        categoryList.categories.nodes.map((item: any) => {
+          return (
+            <li class="lg:block hidden">
+              <a class="btn btn-ghost normal-case text-xl" href={`/categories/${item.slug}`}>{item.name}</a>
+            </li>
+          );
+        })
+      }
+        <div class="relative group lg:hidden block mt-0.5">
+          <!-- Tombol dropdown -->
+          <button class="bg-dark-500 text-dark p-2 rounded hover:bg-blue-700 focus:outline-none focus:bg-blue-700 normal-case text-xl font-medium">
+            Menu
+          </button>
+        
+          <!-- Daftar dropdown -->
+          <ul class="absolute hidden text-gray-700 mt-2 bg-white border border-gray-300 rounded-lg group-hover:block z-10 -left-10">
+            <!-- <li class="p-2 hover:bg-blue-100">Item 1</li> -->
+            {
+              categoryList.categories.nodes.map((item: any) => {
+                return (
+                  <li class="p-2 hover:bg-blue-100">
+                    <a class="btn btn-ghost normal-case text-sm" href={`/categories/${item.slug}`}>{item.name}</a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+        </div>
+      <li>
+        <slot />
+      </li>
+    </ul>
+  </div>
+</div>

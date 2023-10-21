@@ -1,0 +1,33 @@
+{
+  "name": "astro-headless-wp",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "codegen": "graphql-codegen --config codegen.ts"
+  },
+  "dependencies": {
+    "@astrojs/preact": "^3.0.1",
+    "@astrojs/react": "^3.0.2",
+    "@astrojs/sitemap": "^3.0.2",
+    "@astrojs/tailwind": "^5.0.0",
+    "@types/react": "^18.2.23",
+    "@types/react-dom": "^18.2.8",
+    "astro": "^3.2.0",
+    "astro-icon": "^0.8.1",
+    "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/introspection": "4.0.0",
+    "@graphql-codegen/typescript": "4.0.1",
+    "@tailwindcss/typography": "^0.5.10",
+    "daisyui": "^3.8.2",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.2.2"
+  }
+}

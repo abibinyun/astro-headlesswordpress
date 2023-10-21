@@ -1,0 +1,28 @@
+---
+import Link from "./Link.astro";
+const { tags, categories, textTag, textCat, date } = Astro.props;
+---
+
+<div class="tag absolute top-2 left-2">
+  <!-- <p>
+    {textTag}: -->
+
+    {
+      tags && (tags.map((item: any) => {
+        return <Link href={`/tags/${item.slug}`} text={item.name} />;
+      }))
+    }
+  <!-- </p> -->
+</div>
+<div class="categories">
+  <p>
+    {textCat}:
+    
+    {
+      categories && (categories.map((item: any) => {
+        return <Link href={`/categories/${item.slug}`} text={item.name} />;
+      }))
+    }
+</p>
+<p>{date}</p>
+</div>
