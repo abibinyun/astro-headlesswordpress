@@ -4,7 +4,7 @@ const { slug, title, date, image, tags, categories } = Astro.props;
 ---
 
 <div class="card lg:w-[15rem] lg:h-[20rem] bg-base-200 shadow-xl flex flex-col text-xs">
-  <figure class="h-[10rem] w-[15rem] overflow-hidden bg-gray-600 pt-6">
+  <figure class="h-[10rem] w-[15rem] overflow-hidden bg-gray-600 py-6">
     <img src={image} alt={title} class="object-contain h-full w-full" />
   </figure>
   <div class="card-body items-start text-start p-4">

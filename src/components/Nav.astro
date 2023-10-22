@@ -15,7 +15,7 @@ const categoryList = await wpquery({
 
 ---
 
-<div class="navbar bg-base-100 mb-24 lg:px-[7rem] px-4">
+<div class="navbar bg-base-100 mb-24 lg:px-[7rem] px-4 fixed top-0 w-full z-10">
   <div class="flex-1">
     <a class="btn btn-ghost normal-case text-xl" href="/">mangUsop</a>
   </div>
@@ -38,7 +38,7 @@ const categoryList = await wpquery({
           </button>
         
           <!-- Daftar dropdown -->
-          <ul class="absolute hidden text-gray-700 mt-2 bg-white border border-gray-300 rounded-lg group-hover:block z-10 -left-10">
+          <ul class="absolute hidden text-gray-700 mt-2 bg-white border border-gray-300 rounded-lg group-hover:block z-10 -left-12 w-[10rem]">
             <!-- <li class="p-2 hover:bg-blue-100">Item 1</li> -->
             {
               categoryList.categories.nodes.map((item: any) => {
