@@ -49,8 +49,9 @@ export const getStaticPaths = async () => {
 const { post } = Astro.props;
 const { date, title, excerpt, content, featuredImage, categories, id } = post;
 
-const cat = categories.nodes.map((item: any) => item.name).join(', ')
-const relatedPost = await fetchRelatedPost(id, cat)
+const cat = categories.nodes.map((item: any) => item.name).join(", ");
+const relatedPost = await fetchRelatedPost(id, cat);
+// console.log("content: ", content)
 
 const postDate = date.split("T").slice(0, 1);
 const data = {
@@ -58,32 +59,38 @@ const data = {
   description: content,
   image: featuredImage.node.sourceUrl,
   date: postDate,
-  author: 'abi'
-}
-
+  author: "mangUsop",
+};
 ---
-<MainBlog 
-  	title={`Download | ${title} Link GoogleDrive`} 
-    description={excerpt}
-    image={featuredImage.node.sourceUrl}
-    {data}
-	>
-  <div slot="center">
-    <article
-    class="prose md:prose-base prose-sm prose-img:rounded-md prose-headings:underline prose-a:text-blue-900 p-5 lg:ml-[5rem]"
-    >
-    <PostHeader {categories} {title} author={data.author} {date} image={data.image} />
-    <Fragment set:html={content} />
-    <!-- <button class="btn btn-primary mt-10">
-      <a href="/download">back</a>
-        </button> -->
+
+<MainBlog
+  title={`Download | ${title} Link GoogleDrive`}
+  description={excerpt}
+  image={featuredImage.node.sourceUrl}
+  {data}
+>
+<div slot="center">
+  <article
+    class="prose md:prose-base prose-sm prose-img:rounded-md prose-headings:underline prose-a:bg-blue-500 hover:prose-a:bg-blue-700 prose-a:text-white prose-a:font-bold prose-a:py-2 prose-a:px-4 prose-a:rounded p-5 lg:ml-[5rem]"
+  >
+    <PostHeader
+      categories={cat}
+      {title}
+      author={data.author}
+      date={postDate}
+      image={data.image}
+    />
+      <Fragment set:html={content} />
+      <astro-custom-element id="my-custom-element" data-content={content}>
+        <!-- <div></div> -->
+      </astro-custom-element>
     </article>
     <div class="lg:hidden block">
       <h4>Related Post</h4>
       {
         relatedPost.data.posts.edges.map((item: any) => {
           return (
-            <SideBar 
+            <SideBar
               id={item.node.id}
               title={item.node.title}
               date={item.node.date}
@@ -91,27 +98,27 @@ const data = {
               tags={item.node.tags.nodes}
               image={item.node.featuredImage.node.sourceUrl}
             />
-          )
+          );
         })
       }
     </div>
   </div>
-    
+
   <div slot="right" class="lg:mt-[10rem]">
-      <h3>Related Post</h3>
-      {
-        relatedPost.data.posts.edges.map((item: any) => {
-          return (
-            <SideBar 
-              id={item.node.id}
-              title={item.node.title}
-              date={item.node.date}
-              slug={item.node.slug}
-              tags={item.node.tags.nodes}
-              image={item.node.featuredImage.node.sourceUrl}
-            />
-          )
-        })
-      }
+    <h3>Related Post</h3>
+    {
+      relatedPost.data.posts.edges.map((item: any) => {
+        return (
+          <SideBar
+            id={item.node.id}
+            title={item.node.title}
+            date={item.node.date}
+            slug={item.node.slug}
+            tags={item.node.tags.nodes}
+            image={item.node.featuredImage.node.sourceUrl}
+          />
+        );
+      })
+    }
   </div>
 </MainBlog>

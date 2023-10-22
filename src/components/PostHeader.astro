@@ -11,11 +11,11 @@ const { categories, title, author, date, image } = Astro.props;
 <header>
   <div class="container">
     <small>
-      <a href={`/category/${slugify(categories)}/`} class="badge">{categories}</a>
+      <a href={`/categories/${slugify(categories)}`} class="badge badge-accent badge-outline p-3 mb-3">{categories}</a>
     </small>
     <h1 class="h2">{title}</h1>
     <p>
-      by <a href={`/author/${slugify(author)}/`}>{author}</a> • {
+      by <a href={`/author/${author}/`}>{author}</a> • {
         date
       }
     </p>
